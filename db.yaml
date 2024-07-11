@@ -4,6 +4,10 @@
   become: yes
   vars:
     login_host: db.tejaskalla.online
+  vars_prompt:
+  - name: my_sql root password
+    prompt: Enter root password
+    private: no
   tasks:
     - name: Install MySQL server
       ansible.builtin.dnf:
@@ -15,12 +19,19 @@
         name: mysqld
         state: started
         enabled: yes
+    
+    - name: Install python mysql dependencies
+      ansible.builtin.pip:
+        name:
+        - PyMySQL
+        - cryptography
+        executable: pip3.9
 
     # check if password is set up or not
     - name: check the DB connection
       community.mysql.mysql_info:
         login_user: root
-        login_password: ExpenseApp@1
+        login_password: "{{my_sql_root_password}}"
         login_host: "{{ login_host }}"
       ignore_errors: yes
       register: my_sql_connection
@@ -28,3 +39,7 @@
     - name: print output
       ansible.builtin.debug:
         msg: "{{ my_sql_connection }}"
+
+    - name: setup root password
+      ansible.builtin.command: "mysql_secure_installation --set-root-pass {{mysql_root_password}}"
+      when: mysql_connection_output.failed is true
