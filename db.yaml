@@ -1,0 +1,32 @@
+- name: configure DB server
+  hosts: db
+  become: yes
+  vars:
+    login_host: db.tejaskalla.online
+  tasks:
+  - name: Install My SQL server
+    ansible.buitin.dnf:
+      name: mysql-server
+      state: latest
+  
+  - name: Start and Enable MySQL server
+    ansible.buitin.service:
+      name: mysqld
+      state: started
+      enabled: yes
+  
+  # chech password is set up or not
+  - name: chech the DB connection
+    community.mysql.mysql_info:
+      login_user: root
+      login_password: ExpenseApp@1
+      login_host: "{{login_host}}"
+    ignore_errors: yes
+    register: my_sql_connection
+
+  - name: print output
+    ansible.buitin.debug:
+      msg: "{{my_sql_connection}}"
+  
+
+
