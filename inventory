@@ -1,2 +1,8 @@
 [db]
 db.tejaskalla.online
+
+[backend]
+backend.tejaskalla.online
+
+[frontend]
+frontend.tejaskalla.online
