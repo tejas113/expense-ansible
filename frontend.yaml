@@ -16,4 +16,6 @@
         enabled: yes
 
     - name: delete default website
-      ansible.buitin.service:
+      ansible.buitin.file:
+        path: /usr/share/nginx/html/*
+        state: absent
