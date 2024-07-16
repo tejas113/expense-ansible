@@ -1,5 +1,5 @@
 - name: configure backend server
-  become: yes
+  become: ye
   hosts: backend
   vars:
     login_host: db.tejaskalla.online
